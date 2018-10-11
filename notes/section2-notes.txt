@@ -1,0 +1,119 @@
+	1. Conceptual Aside: Syntax Parsers, Execution Contexts, and Lexical Environments
+		a. Syntax Parsers
+			i. A program that reads your code and determines what it does and if its grammar is valid
+				1) Your code is translated and compiled into machine language
+		b. Execution Contexts
+			i. A wrapper to help manage the code that is running
+				1) There are lots of lexical environments
+				2) Which one is currently running is managed via execution contexts
+				3) It can contain things beyond what you've written in your code
+		c. Lexical Environments
+			i. Where something sits physically in the code you write
+				1) Lexical means having to do with words or grammar
+				2) A lexical environment exists in programming languages in which where you write something is important
+	2. Conceptual Aside: Name/Value Pairs and Objects
+		a. Name/Value Pair
+			i. A Name which maps to a unique value
+			ii. The name may be defined more than once but only can have one value in any given context
+			iii. That value may be more name/value pairs
+		b. Object
+			i. A collection of name value pairs
+	3. The Global Environment and the Global Object
+		a. Execution Context (Global)
+			i. JS engine creates Global Object
+				1) Global - "Not inside a function"
+			ii. JS engine creates 'this'
+			iii. Without any code, browser designates Window as Global Object and 'this' variable assignment
+			iv. Outer Environment - At the global level: null
+			v. Your code
+	4. The Execution Context: Creation and Hoisting
+		a. Execution Context is created in 2 phases:
+			i. Creation phase
+				1) Global Object, 'this', Outer Environment
+				2) Hoisiting: Sets up a Memory Space for Variables and Functions
+					a) This is Hoisting
+						i) Before your code is executed line by line, JS engine creates memory space for your variables and functions
+							One. Functions are placed into memory in their entirety at this phase
+							Two. All variables are initially set into memory as undefined
+	5. Conceptual Aside: JavaScript and 'undefined'
+		a. Not defined !== undefined
+		b. Undefined is a special value that declares that the variable has not yet been assigned
+			i. NEVER set a variable to undefined
+				1) This is problematic for future debugging. 
+				2) Just declare the var without assignment and let JS engine set the variable to undefined
+	6. The Execution Context: Code Execution
+		a. Execution Context is created in 2 phases:
+			i. Creation phase
+			ii. Code Execution
+				1) JavaScript executes code line by line from the top down
+	7. Conceptual Aside: Single Threaded, Synchronous Execution
+		a. Single Threaded: One command is executed at a time
+		b. Synchronous: One line of code executed at a time and in the order that it appears
+	8. Function Invocation and the Execution Stack
+		a. Invocation: Running a function by using ()
+			i. Creates a new execution context
+			ii. Placed onto the Execution Stack
+				1) If another function is invoked within the function or even if the function calls itself, a new execution context is created and added to the execution stack
+				2) Execution Stack works with LIFO 
+	9. Functions, Context and Variable Environements
+		a. Variable Environment: Where the variable lives
+			i. Every execution context has its own variable environment
+				1) This is the nature of variable scope
+			    1 function b() {
+			    2     let myVar;
+			    3     console.log(myVar); // => undefined (exec order: 3)
+			    4 }
+			    5 
+			    6 function a() {
+			    7     let myVar = 2;
+			    8     console.log(myVar); // => 2 (exec order: 2)
+			    9     b();
+			   10 }
+			   11 
+			   12 let myVar = 1;
+			   13 console.log(myVar); // => 1 (exec order: 1)
+			   14 a();
+			   15 console.log(myVar); // => 1 (exec order: 4)
+	10. The Scope Chain
+		    1 function b() {
+		    2     console.log(myVar); // => 1
+		    3 }
+		    4 
+		    5 function a() {
+		    6     myVar = 2;
+		    7     console.log(myVar);
+		    8     b();
+		    9 }
+		   10 
+		   11 let myVar = 1;
+		   12 a();
+		a. Because of Lexical Environment, function b exists inside the Global Environment, so function b's Outer Environment will be Global even though function b is invoked from within function a.
+			i. The chain of outer environments determined by the lexical environment of your code, is called the Scope Chain
+				function a() {
+				    function b() {
+				        console.log(myVar); // => 2
+				    }
+				    
+				    var myVar = 2;
+				    b();
+				}
+				
+				var myVar = 1;
+				a();
+			ii. Now we've changed the lexical context of function b, so function a will now be the outer environment of function b. Therefore it will take the value of myVar from the variable environment within function a
+	11. Scope, ES6 and let
+		a. Scope: Where a variable is available in your code
+			i. And if it's truly the same variable, or a new copy
+			ii. { } designates a code block
+				1) Let variable creates a variable that only exists as is within that block
+	12. What About Asynchronous Callbacks?
+		a. Asynchronous: More than one at a time
+		b. The JavaScript Engine
+			i. Event Queue
+				1) When an event occurs, it is placed into a queue
+				2) JavaScript looks at the Event Queue once the execution stack is empty
+					a) Then it looks for an event handler, if present, adds to execution stack
+					b) Once execution contexts are all gone, returns to Event Queue to check for events (event loop)
+					c) Long running functions can interrupt events being handled
+		c. Asynchronicity is really occurring outside of the JavaScript Engine
+			
