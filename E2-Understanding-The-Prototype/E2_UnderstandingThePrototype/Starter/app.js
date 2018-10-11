@@ -11,7 +11,7 @@ let john = {
   lastname: 'Doe'
 }
 
-// Don't do this EVER, demo only!
+/* Don't do this EVER, demo only! */
 // give john object access to person method getFullName()
 john.__proto__ = person;
 console.log(john.getFullName()); // => 'John Doe'
@@ -23,5 +23,5 @@ let jane = {
 }
 
 jane.__proto__ = person;
+// Prototype Chain finds firstname, doesn't find lastname, looks and grabs lastname property from person {}
 console.log(jane.getFullName()); // => 'Jane Default'
-

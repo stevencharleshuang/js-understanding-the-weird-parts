@@ -52,4 +52,4 @@ let checkPastLimitSimplified = function(limiter) {
 };
 
 let arr5 = mapForEach(arr1, checkPastLimitSimplified(2));
-console.log(arr5);
+console.log(arr5); // => [false, false, true]

@@ -1,0 +1,109 @@
+	1. Conceptual Aside: Types and JavaScript
+		a. Dynamic Typing: You don't tell the engine what type of data a variable holds, it figures it out while your code is running
+			i. Variables can hold different types of values because it's all figured out during execution
+				1) A variable assigned a Boolean value can be reassigned an integer value
+			ii. Other languages may use Static Typing which designates a type to a variable at the point of declaration
+	2. Primitive Types
+		a. Primitive Type: A type of data that represents a single value. AKA not an object
+		b. 6 Types
+			i. Undefined	Represents lack of existence (You shouldn't assign variables this value. Allow JS Engine to do it)
+			null	null represents lack of existence (You should assign variables this value)
+			Boolean	true or false
+			Number	Floating point number(there's always some decimalis). Unlike other programming languages, there's only one 'number' type…and it can make math weird
+			String	A sequence of characters both ' ' and " " can be used
+			Symbol	Used in ES6 (the next version of Javascript) 
+	3. Conceptual Aside: Operators
+		a. Operators: A special function that is syntactically (written) different. Generally, operators take two values and return a result
+			i. Operators in JS are like functions provided by the JS Engine
+			ii. Infix notation	3 + 4
+			Prefix notation	+ 3 4
+			Postfix notation	3 4 +
+	4. Operator Precedence and Associativity
+		a. Operator Precendence: Which operator function gets called first when there is more than one operator in one line of code
+			i. Functions are called in order of precedence (higher precedence wins)
+		b. Operator Associativity: What order operator functions get called in: Left-to-Right or Right-to-Left when functions have the same precedence
+			let a = 3 + 4 * 5;
+			console.log(a); // => 23
+			i. Multiplication has higher operator precedence than addition, so multiplication will be carried out before addition as expected
+		c. Adding parens will affect Operator precedence i.e.
+			let a = (3 + 4) * 5;
+			console.log(a); // => 35
+			i. Because parentheses affected Operator Precedence, addition carries out before multiplication
+		d. What if a line of code has the same precedence?
+			let a = 2, b = 3, c = 4;
+			
+			a = b = c;
+			
+			console.log(a); // => 4
+			console.log(b); // => 4
+			console.log(c); // => 4
+			i. Because of Associativity of assignment operator (right-to-left) c is evaluated, then b, and lastly a. Therefore the console.logs will return 4
+	5. Operator Precedence and Associativity Table (No Lecture Video)
+	6. Conceptual Aside Coercion
+		a. Coercion: converting a value from one type to another. This happens quite often in JS because it's dynamically typed
+			let a = 1 + '2';
+			console.log(a); // => 12
+			i. Type coercion converted the first value into a string by the JS Engine
+			ii. JS Engine then concatenated the two string values
+			iii. This has a lot to do with JS being dynamically typed
+		b. Coercion can cause bugs, good to know and understand to help with debugging
+	7. Comparison Operators
+		a. What happens if you: 
+			i. console.log(1 <  2 < 3) // => true
+				1) Looks simple but actually JS engine evaluates 1 < 2 to true
+				2) The final comparison is true < 3
+					a) JS Engine evaluates true as 1
+					b) Therefore true < 3 aka 1 < 3 is true
+			ii. console.log(3 < 2 < 1) // => true
+				1) Less than operator has Associativity Left-to-Right
+				2) 3 < 2 evaluates to false
+				3) Therefore the final evaluation is really false < 1
+				4) By using Number(false) [we force a coercion to see what the coercion result is], we see that false coerces to the number 0
+					a) false < 1 is true because 0 < 1 is true
+		b. Number(undefined)	NaN
+		Number(null)	0
+		c. Coercion can be unpredictable as seen above
+			i. When using comparisons equality, use === over == which will also compare the primitive types
+				1) 3 == '3' // => true
+					a) Only use == if you explicitly want to coerce the two types
+					b) Also true for != and !==
+				2) 3 === '3' // => false
+	8. Equality Comparisons Table (No Lecture Video)
+	9. Existence and Booleans
+		a. Boolean() function can be used for testing purposes to check results of type coercion
+		b. Examples
+			let a;
+			
+			if (a) {
+			    console.log('Something is there');
+			}
+			i. Because the JS Engine automatically sets a to undefined, the conditional statement will fail and nothing will happen as a result
+				1) This is a useful method for checking if a variable has any value assigned or forcing a Boolean
+			let a = 'Hi';
+			
+			if (a) {
+			    console.log('Something is there');
+			}
+			ii. Now that a value is assigned to the variable, this block will return with a console log of 'Something is there'
+			let a = 0;
+			
+			if (a || a === 0) {
+			    console.log('Something is there');
+			}
+			iii. In the above example: 
+				1) Because || operator evaluates from Right-to-Left, we compare a === 0 is evaluated to true first
+				2) a  is then evaluated to false because 0 is falsey
+				3) a || a === 0 is finally evaluated as false || true and therefore evaluates to true in the end
+	10. Default Values
+		a. If || operator is used with two nonBoolean values, it will return the value that can be converted to true
+			i. "" || "hello" // => "hello"
+			ii. Because || operator has higher precedence than assignment operator, can be used to provide default values aka OPTIONS
+				1) name = name || '<Your name here>'
+					a) If name is undefined, will return the latter operand
+	11. Framework Aside: Default Values
+		a. Default Values
+			i. When writing libraries or frameworks, to avoid variable collision in the case of stacking libs and frameworks, devs may use default values to avoid conflicts and collisions
+				1) i.e. window.libraryName = window.libraryName || 'Lib x'
+					a) If there already exists a variable assignment for libraryName in the stack, do not reassign the variable value, otherwise assign a new value to that variable created in the Global Environment
+				
+			

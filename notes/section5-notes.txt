@@ -1,0 +1,75 @@
+	1. Conceptual Aside: Classical vs. Prototypal Inheritance
+		a. Inheritance: One object gets access to the properties and methods of another object
+		b. Classical Inheritance: Most known and most popular way of inheritance
+			i. Verbose
+				1) Terms
+					a) Friend
+					b) Protected
+					c) Private
+					d) Interface
+		c. Prototypal Inheritance
+			i. Simple
+			ii. Extensible
+			iii. Easy to understand
+	2. Understanding the Prototype
+		a. All objects in JS have a prototype property
+			i. This property is a reference to another object called proto {}
+				1) Prototype Chain: looks for properties in a sequence of objects connected by proto
+				2) Multiple objects can share the same proto by pointing them to the same reference in memory
+	3. Everything is an Object (or a primitive)
+		a. Base Object in JS
+			i. a.__proto__
+			ii. The bottom of the prototype chain
+			iii. All objects have access to methods of __proto__ because the base object is linked to it
+		b. Base Function in JS
+			i. b.__proto__
+			ii. The most base function of JS
+			iii. All functions have access to methods of __proto__ because the base function is linked to it
+		c. Base Array in JS
+			i. Same deal
+	4. Reflection and Extend
+		a. Reflection: An object can look at itself, listing and changing its properties and methods
+		
+		let person = {
+			firstname: 'Default',
+			lastname: 'Default',
+			getFullName: function() {
+				return this.firstname + ' ' + this.lastname; 
+			}
+		}
+		
+		let john = {
+			firstname: 'John',
+			lastname: 'Doe'
+		}
+		
+		// don't do this EVER! for demo purposes only!!!
+		john.__proto__ = person;
+		
+		// Example of Reflection
+		for (let prop in john) {
+			// hasOwnProperty will check if object actually has passed in property and return Boolean
+			if (john.hasOwnProperty(prop)) {
+				console.log(prop + ': ' + john[prop]);
+			}
+		}
+		
+		// Example of Extend using Underscore.js
+		let jane = {
+			address: '111 Main St.',
+			getFormalFullName: function() {
+				return this.lastname + ', ' + this.firstname;
+			}
+		}
+		
+		let jim = {
+			getFormalFullName: function() {
+				return firstname;
+			}
+		}
+		
+		// Grabs properties from jane and jim objects that are missing from john object and adds them to john object
+		_.extend(john, jane, jim)
+		console.log(john)
+		
+		b. ES6 replaces this functionality with extends()
